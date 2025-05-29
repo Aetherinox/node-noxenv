@@ -1,5 +1,5 @@
-name: "📦 Package › Tests"
-run-name: "📦 Package › Tests"
+name: '📦 Package › Tests'
+run-name: '📦 Package › Tests'
 
 on:
     push:
@@ -10,7 +10,7 @@ on:
 
     pull_request:
     workflow_dispatch:
-  
+
 jobs:
     job-tests-run:
         name: >-
@@ -20,8 +20,7 @@ jobs:
         strategy:
             matrix:
                 os: [windows-latest, macOS-latest, ubuntu-latest]
-                node-version: [14.x, 16.x, 18.x, 20.x, 21.x]
-
+                node-version: [16.x, 18.x, 20.x, 21.x, 22.x]
         runs-on: ${{ matrix.os }}
         env:
           CI: true
@@ -30,37 +29,37 @@ jobs:
             packages: write
         steps:
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > Fix Line Endings
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "🛒 Fix Git Checkout Line Endings"
+            - name: '🛒 Fix Git Checkout Line Endings'
               id: task_tests_git-fixlines
               run: |
                 git config --global core.autocrlf input
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > Checkout
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "☑️ Checkout"
+            - name: '☑️ Checkout'
               id: task_tests_run_checkout
               uses: actions/checkout@v4
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > Cancel existing runs
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "🛑 Cancel Previous Runs"
+            - name: '🛑 Cancel Previous Runs'
               uses: styfle/cancel-workflow-action@0.12.1
               with:
                 access_token: ${{ secrets.ADMINSERV_TOKEN_CL }}
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > Setup Node
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "⚙️ Setup Node"
+            - name: '⚙️ Setup Node'
               id: task_tests_node_setup
               uses: actions/setup-node@v4
               with:
@@ -69,20 +68,25 @@ jobs:
                 always-auth: true
                 scope: '@aetherinox'
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > Get NPM Cache Directory
-            # ---------------------------------------------------------------------------------------
+            #
+            #   must set `shell:bash` otherwise command will fail on Windows runner.
+            #   bash can be used for both Linux and Windows
+            # #
 
-            - name: "📂 Get NPM Cache Directory"
+            - name: '📂 Get NPM Cache Directory'
               id: task_tests_npm_cache_dir_get
+              shell: bash
               run: |
-                  echo "::set-output name=dir::$(npm config get cache)"
+                  cacheDir=$(npm config get cache)
+                  echo "dir=$cacheDir" >> $GITHUB_OUTPUT
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > NPM Cache
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "📑 NPM cache"
+            - name: '📑 NPM cache'
               id: task_tests_npm_cache_dir_run # use this to check for `cache-hit` ==> if: steps.task_tests_npm_cache_dir_run.outputs.cache-hit != 'true'
               uses: actions/cache@v4
               with:
@@ -91,38 +95,38 @@ jobs:
                   restore-keys: |
                       ${{ runner.OS }}-node-
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > NPM Install
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "📦 NPM › Install"
+            - name: '📦 NPM › Install'
               id: task_tests_npm_install
               run: |
                 npm install
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > NPM Pretty and Linter
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "📦 NPM › Pretty & Linter"
+            - name: '📦 NPM › Pretty & Linter'
               id: task_tests_npm_prettylint
               run: |
                 npm run pretty
                 npm run lint
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > Run Validation Script
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "▶️ Run Build"
+            - name: '▶️ Run Build'
               run: |
                 npm run validate
 
-            # ---------------------------------------------------------------------------------------
+            # #
             #   Job > Tests > Upload Coverage to Codecov
-            # ---------------------------------------------------------------------------------------
+            # #
 
-            - name: "📝 Upload Coverage Reports › Codecov"
+            - name: '📝 Upload Coverage Reports › Codecov'
               id: task_tests_codecov_upload
               uses: codecov/codecov-action@v4
               with:
@@ -133,9 +137,9 @@ jobs:
                   CI_OS: ${{ matrix.os }}
                   NODE_VERSION: ${{ matrix.node-version }}
 
-    # ---------------------------------------------------------------------------------------
+    # #
     #   JOB > TESTS > COMPLETE
-    # ---------------------------------------------------------------------------------------
+    # #
 
     job-tests-complete:
         name: >-
@@ -143,7 +147,7 @@ jobs:
         needs: job-tests-run
         runs-on: ubuntu-latest
         steps:
-            - name: "☑️ Tests Complete"
+            - name: '☑️ Tests Complete'
               id: task_tests_complete
               run: |
                 echo 'Tests passed'

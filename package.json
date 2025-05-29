@@ -49,7 +49,7 @@
         "build": "kcd-scripts build",
         "pretty": "kcd-scripts format",
         "lint": "kcd-scripts lint",
-        "test": "kcd-scripts test",
+        "test": "kcd-scripts test .",
         "test:update": "npm test -- --updateSnapshot --coverage",
         "contrib:add": "all-contributors add",
         "contrib:generate": "all-contributors generate",
@@ -72,9 +72,6 @@
         "kcd-scripts": "^15.0.1",
         "all-contributors-cli": "^6.26.1",
         "@types/uuid": "^9.0.8"
-    },
-    "eslintConfig": {
-        "extends": "./node_modules/kcd-scripts/eslint.js"
     },
     "babel": {}
 }
