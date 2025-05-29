@@ -1,6 +1,6 @@
 {
     "name": "@aetherinox/noxenv",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "Set and use environment variables across different platforms.",
     "homepage": "https://github.com/Aetherinox/node-noxenv",
     "author": "Aetherinox <thebinaryninja@proton.me>",
@@ -49,32 +49,35 @@
         "lint": "kcd-scripts lint",
         "test": "kcd-scripts test",
         "test:update": "npm test -- --updateSnapshot --coverage",
+        "test:main": "noxenv USER_NAME=\"Joe\" npm run test:child",
+        "test:child": "noxenv-shell \"echo Hello $USER_NAME\"",
         "contrib:add": "all-contributors add",
         "contrib:generate": "all-contributors generate",
-        "root": "node root.js",
-        "root:generate": "node root.js generate",
-        "root:root": "npx --quiet env-cmd --no-override node root.js",
-        "root:uuid": "npx --quiet env-cmd --no-override node root.js uuid",
-        "root:guid": "npx --quiet env-cmd --no-override node root.js guid",
+        "root": "node root.cjs",
+        "root:generate": "node root.cjs generate",
+        "root:root": "npx --quiet env-cmd --no-override node root.cjs",
+        "root:uuid": "npx --quiet env-cmd --no-override node root.cjs uuid",
+        "root:guid": "npx --quiet env-cmd --no-override node root.cjs guid",
         "root:version": "node -p require('./package.json').version;"
     },
     "files": [
         "src",
         "!tests"
     ],
+    "devDependencies": {
+      "@aetherinox/noxenv": "^1.1.0",
+      "@types/uuid": "^10.0.0",
+      "all-contributors-cli": "^6.26.1",
+      "kcd-scripts": "^16.0.0"
+  },
     "dependencies": {
         "cross-spawn": "^7.0.6",
         "uuid": "^11.1.0"
     },
-    "devDependencies": {
-        "kcd-scripts": "^16.0.0",
-        "all-contributors-cli": "^6.26.1",
-        "@types/uuid": "^10.0.0"
-    },
     "overrides": {
-      "concurrently": {
-        "spawn-command": "1.0.0"
-      }
+        "concurrently": {
+            "spawn-command": "1.0.0"
+        }
     },
     "eslintConfig": {
         "extends": "./node_modules/kcd-scripts/eslint.js"
