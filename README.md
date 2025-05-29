@@ -47,7 +47,7 @@ Most Windows-based command prompts / terminals will have issues when you attempt
 <br />
 
 > [!NOTE]
-> `noxenv` only supports Node.js v14 and higher.
+> `noxenv` only supports Node.js v16 and higher.
 
 <br />
 
@@ -61,7 +61,7 @@ This module is distributed via [npm][npm] which is bundled with [node][node]. To
 
 ```json
 "devDependencies": {
-    "@aetherinox/noxenv": "^1.0.0"
+    "@aetherinox/noxenv": "^1.1.0"
 },
 ```
 
@@ -250,6 +250,31 @@ The following people have helped get this project going:
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+
+<br />
+
+---
+
+<br />
+
+## Troubleshooting
+
+Error: 'noxenv' is not recognized as an internal or external command
+
+If you get the following error when running a NodeJS script which utilizes noxenv:
+
+```shell
+'noxenv' is not recognized as an internal or external command,
+operable program or batch file.
+```
+
+<br />
+
+Ensure you install it first locally as a dev dependency:
+
+```shell
+npm i --save-dev @aetherinox/noxenv
+```
 
 <br />
 
