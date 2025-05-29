@@ -64,6 +64,7 @@ env:
     LABEL_TYPE_PR:                  Type › Pull Request
     LABEL_TYPE_DEPENDENCY:          Type › Dependency
     LABEL_TYPE_GITACTION:           Type › Git Action
+    LABEL_TYPE_MAINTENANCE:         Type › Lock Maintenance
 
     ASSIGN_USER:                    Aetherinox
     BOT_NAME_1:                     EuropaServ
@@ -95,6 +96,7 @@ env:
           { "name": "Status › Stale",               "color": "928282", "description": "Has not had any activity in over 30 days" },
           { "name": "Type › Bug",                   "color": "9a2c2c", "description": "Something isn't working" },
           { "name": "Type › Dependency",            "color": "243759", "description": "Item is associated to dependency" },
+          { "name": "Type › Lock Maintenance",      "color": "FBCA04", "description": "Sync package-lock.json" },
           { "name": "Type › Docs",                  "color": "0e588d", "description": "Improvements or modifications to docs" },
           { "name": "Type › Feature",               "color": "3c4e93", "description": "Feature request" },
           { "name": "Type › Git Action",            "color": "030406", "description": "GitHub Action / workflow" },
@@ -141,7 +143,7 @@ jobs:
 
     # #
     #   Job › PR Scan
-    # 
+    #
     #   automatically scan a pull request once it is submitted
     # #
 
@@ -174,9 +176,9 @@ jobs:
 
             # #
             #   PR Scan › Labels › Verify Existing
-            #   
+            #
             #   check if repo has all of the needed issue / pr labels; create label if not exists
-            #   
+            #
             #   action needed if using 'pull_request' and 'issue_comment'
             #   to get the pull request, you would normally use ${{ github.event.number }}
             #   however this isnt available for 'issue_comment'
@@ -218,7 +220,7 @@ jobs:
 
             # #
             #   PR Scan › Assign Pull Request ID to variable
-            #   
+            #
             #   get id (number) for pr when submitted
             # #
 
@@ -255,7 +257,7 @@ jobs:
 
             # #
             #   PR Scan › Pull-Request ID › Print
-            #   
+            #
             #   prints the pr number detected
             # #
 
@@ -291,7 +293,7 @@ jobs:
 
             # #
             #     PR Scan › Get List of Changed Files
-            #   
+            #
             #     Effortlessly track all changed files and directories relative to a target branch,
             #     the current branch (preceding commit or the last remote commit), multiple branches,
             #     or custom commits returning relative paths from the project root using this
@@ -355,7 +357,7 @@ jobs:
                         /*  #
                         #    Example PR used for local act testing
                         #    Uncomment to use in local env
-                        #   
+                        #
                         #       can be tested using act:
                         #           - https://github.com/nektos/act
                         #       command:
@@ -554,13 +556,32 @@ jobs:
                       const type_dependency =
                       [
                           "dependabot/npm_and_yarn",
-                          "renovate/github_actions"
+                          "renovate/github_actions",
+                          "renovate/testing-library",
+                          "renovate/electron",
+                          "renovate/aetherinox/noxenv",
+                          "renovate/playwright",
+                          "renovate/types",
+                          "renovate/@types",
+                          "renovate/eslint",
+                          "renovate/stylistic",
+                          "renovate/jimp",
+                          "renovate/custom-electron-prompt",
+                          "renovate/moment",
+                          "renovate/semver",
+                          "renovate/toasted",
+                          "renovate/uuid"
                       ];
 
                       const type_gitaction =
                       [
                           "dependabot/github_actions",
                           "renovate/github_actions"
+                      ];
+
+                      const type_maint =
+                      [
+                          "renovate/lock-file-maintenance"
                       ];
 
                       const files_skipList =
@@ -919,11 +940,14 @@ jobs:
 
                       const bGitaction    = type_gitaction.some( s => s.includes( branch_ref ) || branch_ref.includes( s ) );
                       const bDependency   = type_dependency.some( s => s.includes( branch_ref ) || branch_ref.includes( s ) );
+                      const bMaintenance  = type_maint.some( s => s.includes( branch_ref ) || branch_ref.includes( s ) );
 
                       if ( actor ==  "${{ env.BOT_NAME_DEPENDABOT }}" && bDependency || actor ==  "${{ env.BOT_NAME_RENOVATE }}" && bDependency )
                           labels.push( "${{ env.LABEL_TYPE_DEPENDENCY }}" );
                       else if ( actor ==  "${{ env.BOT_NAME_DEPENDABOT }}" && bGitaction || actor ==  "${{ env.BOT_NAME_RENOVATE }}" && bGitaction )
                           labels.push( "${{ env.LABEL_TYPE_GITACTION }}" );
+                      else if ( actor ==  "${{ env.BOT_NAME_DEPENDABOT }}" && bMaintenance || actor ==  "${{ env.BOT_NAME_RENOVATE }}" && bMaintenance )
+                          labels.push( "${{ env.LABEL_TYPE_MAINTENANCE }}" );
 
                       if ( ct.payload.pull_request.labels.filter( label => label.name === "${{ env.LABEL_CHECK_CHANGES_REQ }}" ).length > 0 )
                           labels.push( "${{ env.LABEL_CHECK_CHANGES_REQ }}" );
