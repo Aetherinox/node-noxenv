@@ -259,7 +259,11 @@ The following people have helped get this project going:
 
 ## Troubleshooting
 
-Error: 'noxenv' is not recognized as an internal or external command
+Review the following list of issues and corrective measures you can take to address the issues:
+
+<br />
+
+### Error: 'noxenv' is not recognized as an internal or external command
 
 If you get the following error when running a NodeJS script which utilizes noxenv:
 
@@ -275,15 +279,6 @@ Ensure you install it first locally as a dev dependency:
 ```shell
 npm i --save-dev @aetherinox/noxenv
 ```
-
-<br />
-
----
-
-<br />
-
-## Creds
-This is based on the older module `cross-env` which is a great asset, however, I needed updated dependencies and additional functionality; along with the ability to implement whatever I need. Including  plans for rollup. This is more of a personal project, but if anyone finds it useful; you're free to use it. All the original functionality is included, just updates. Also going to be adding config / `.env` file support.
 
 <br />
 
