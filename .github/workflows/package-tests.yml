@@ -165,7 +165,7 @@ jobs:
 
             - name: '📝 Upload Coverage Reports › Codecov'
               id: task_tests_codecov_upload
-              uses: codecov/codecov-action@v4
+              uses: codecov/codecov-action@v5
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
                   slug: Aetherinox/noxenv
