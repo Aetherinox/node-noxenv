@@ -361,12 +361,12 @@ The following people have helped keep this project going:
   [contribs-all-uri]: https://github.com/all-contributors/all-contributors
 
 <!-- BADGE > GITHUB > BUILD > NPM -->
-  [github-build-img]: https://img.shields.io/github/actions/workflow/status/Aetherinox/node-noxenv/npm-release.yml?logo=github&logoColor=FFFFFF&label=Build&color=%23278b30
-  [github-build-uri]: https://github.com/Aetherinox/node-noxenv/actions/workflows/npm-release.yml
+  [github-build-img]: https://img.shields.io/github/actions/workflow/status/Aetherinox/node-noxenv/release.yml?logo=github&logoColor=FFFFFF&label=Build&color=%23278b30
+  [github-build-uri]: https://github.com/Aetherinox/node-noxenv/actions/workflows/release.yml
 
 <!-- BADGE > GITHUB > BUILD > Pypi -->
   [github-build-pypi-img]: https://img.shields.io/github/actions/workflow/status/Aetherinox/node-noxenv/release-pypi.yml?logo=github&logoColor=FFFFFF&label=Build&color=%23278b30
-  [github-build-pypi-uri]: https://github.com/Aetherinox/node-noxenv/actions/workflows/pypi-release.yml
+  [github-build-pypi-uri]: https://github.com/Aetherinox/node-noxenv/actions/workflows/release-pypi.yml
 
 <!-- BADGE > GITHUB > TESTS -->
   [github-tests-img]: https://img.shields.io/github/actions/workflow/status/Aetherinox/node-noxenv/npm-tests.yml?logo=github&label=Tests&color=2c6488
