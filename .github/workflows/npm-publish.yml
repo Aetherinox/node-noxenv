@@ -577,7 +577,6 @@ jobs:
                   startsWith( inputs.SHOW_UNCATEGORIZED, true ) ||
                   startsWith( env.SHOW_UNCATEGORIZED, true )
               uses: mikepenz/release-changelog-builder-action@v5
-              uses: mikepenz/release-changelog-builder-action@v4
               with:
                   token: ${{ secrets.ADMINSERV_TOKEN }}
                   #fromTag: "${{ env.TAG_LAST }}"
