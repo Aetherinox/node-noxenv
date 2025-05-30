@@ -387,21 +387,25 @@ jobs:
                   echo "Tag already present: ${{ steps.task_release_tag_create.outputs.tag_exists }}"
 
             # #
-            #   Release › GPG › Import Key
+            #   Release › GPG › Import Key (No Passphrase)
+            #
+            #   requires your GPG private key, converted to base64 binary .gpg (not armored .asc)
             # #
 
-            - name: 'Import signing key'
-              id: task_release_gpg_import
+            - name: '🪪 GPG › Import Signing Key › W/o Passphrase'
+              id: task_release_gpg_import_nopass
               if: env.GPG_KEY_BASE64 != '' && env.GPG_KEY_PASSPHRASE == ''
               run: |
-                  echo $GPG_KEY_BASE64 | base64 -di | gpg --import
+                  echo "$GPG_KEY_BASE64" | base64 -di | gpg --import
 
             # #
-            #   Release › GPG › Strip Passphrase
+            #   Release › GPG › Import Key (With Passphrase)
+            #
+            #   requires your GPG private key, converted to base64 binary .gpg (not armored .asc)
             # #
 
-            - name: 'Import signing key and strip passphrase'
-              id: task_release_gpg_prepare
+            - name: '🪪 GPG › Import Signing Key › w/ Passphrase'
+              id: task_release_gpg_import_withpass
               if: env.GPG_KEY_BASE64 != '' && env.GPG_KEY_PASSPHRASE != ''
               run: |
                   echo "$GPG_KEY_BASE64" | base64 -di > /tmp/signing-key.gpg
@@ -552,7 +556,7 @@ jobs:
                   fetchViaCommits: true
                   configurationJson: |
                     {
-                      "template": "## Release Info \n| Item | Value |\n| --- | --- |\n|<sub>📄 ${{ env.FILE_ZIP }}</sub>|<sub>Compiled noxenv library</sub>|\n|<sub>📄 sha256sum.txt.asc</sub>|<sub>Signed SHA hash digest</sub>|\n|<sub>|\n|<sub>🏷️ SHA256</sub>|<sub>`${{ env.SHA256SUM }}`</sub>|\n|<sub>🏷️ GUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.GUID }}`</sub>|\n|<sub>🏷️ UUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.UUID }}`</sub>|\n|<sub>🕟 Stamp</sub>|<sub>`#{{FROM_TAG}}-#{{FROM_TAG_DATE}} 🔺 #{{TO_TAG}}-#{{TO_TAG_DATE}}`</sub>|\n|<sub>📅 Last Release</sub>|<sub>`#{{DAYS_SINCE}} days ago`</sub>|\n\n<br>\n\n---\n\n<br>\n\n### What's New\nThis release contains the following changes:\n\n<br>\n\n---\n\n<br>\n\n### Statistics\nHow the files have changed:\n<ul><li><a href='#{{RELEASE_DIFF}}'>Changed files</a> : <b>#{{CHANGED_FILES}}</b></li><li>Changes : <b>#{{CHANGES}}</b></li><li>Commits : <b>#{{COMMITS}}</b></li><li>Additions : <b>#{{ADDITIONS}}</b></li><li>Deletions : <b>#{{DELETIONS}}</b></li><li>PRs (categorized) : <b>#{{CATEGORIZED_COUNT}}</b></li><li>PRs (uncategorized) : <b>#{{UNCATEGORIZED_COUNT}}</b></li><li>PRs (open) : <b>#{{OPEN_COUNT}}</b></li>\n<br />\n</ul>\n\n<br>\n\n---\n\n<br>\n\n### Pull Requests\nThis release is associated with the following pull requests:\n#{{CHANGELOG}}\n\n<br>\n\n---\n\n<br>\n\n"
+                      "template": "## Release Info \n| Item | Value |\n| --- | --- |\n|<sub>📄 ${{ env.FILE_ZIP }}</sub>|<sub>Compiled noxenv library</sub>|\n|<sub>📄 sha256sum.txt.asc</sub>|<sub>Signed SHA256 hash digest</sub>|\n|<sub>📄 sha1sum.txt.asc</sub>|<sub>Signed SHA1 hash digest</sub>|\n|<sub>🏷️ SHA256</sub>|<sub>`${{ env.SHA256SUM }}`</sub>|\n|<sub>🏷️ GUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.GUID }}`</sub>|\n|<sub>🏷️ UUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.UUID }}`</sub>|\n|<sub>🕟 Stamp</sub>|<sub>`#{{FROM_TAG}}-#{{FROM_TAG_DATE}} 🔺 #{{TO_TAG}}-#{{TO_TAG_DATE}}`</sub>|\n|<sub>📅 Last Release</sub>|<sub>`#{{DAYS_SINCE}} days ago`</sub>|\n\n<br>\n\n---\n\n<br>\n\n### What's New\nThis release contains the following changes:\n\n<br>\n\n---\n\n<br>\n\n### Statistics\nHow the files have changed:\n<ul><li><a href='#{{RELEASE_DIFF}}'>Changed files</a> : <b>#{{CHANGED_FILES}}</b></li><li>Changes : <b>#{{CHANGES}}</b></li><li>Commits : <b>#{{COMMITS}}</b></li><li>Additions : <b>#{{ADDITIONS}}</b></li><li>Deletions : <b>#{{DELETIONS}}</b></li><li>PRs (categorized) : <b>#{{CATEGORIZED_COUNT}}</b></li><li>PRs (uncategorized) : <b>#{{UNCATEGORIZED_COUNT}}</b></li><li>PRs (open) : <b>#{{OPEN_COUNT}}</b></li>\n<br />\n</ul>\n\n<br>\n\n---\n\n<br>\n\n### Pull Requests\nThis release is associated with the following pull requests:\n#{{CHANGELOG}}\n\n<br>\n\n---\n\n<br>\n\n"
                     }
               env:
                   GITHUB_TOKEN: ${{ secrets.ADMINSERV_TOKEN }}
@@ -588,7 +592,7 @@ jobs:
                   fetchViaCommits: true
                   configurationJson: |
                     {
-                      "template": "## Release Info \n| Item | Value |\n| --- | --- |\n|<sub>📄 ${{ env.FILE_ZIP }}</sub>|<sub>Compiled noxenv library</sub>|\n|<sub>📄 sha256sum.txt.asc</sub>|<sub>Signed SHA hash digest</sub>|\n|<sub>🏷️ SHA256</sub>|<sub>`${{ env.SHA256SUM }}`</sub>|\n|<sub>🏷️ GUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.GUID }}`</sub>|\n|<sub>🏷️ UUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.UUID }}`</sub>|\n|<sub>🕟 Stamp</sub>|<sub>`#{{FROM_TAG}}-#{{FROM_TAG_DATE}} 🔺 #{{TO_TAG}}-#{{TO_TAG_DATE}}`</sub>|\n|<sub>📅 Last Release</sub>|<sub>`#{{DAYS_SINCE}} days ago`</sub>|\n\n<br>\n\n---\n\n<br>\n\n### What's New\nThis release contains the following changes:\n\n<br>\n\n---\n\n<br>\n\n### Statistics\nHow the files have changed:\n<ul><li><a href='#{{RELEASE_DIFF}}'>Changed files</a> : <b>#{{CHANGED_FILES}}</b></li><li>Changes : <b>#{{CHANGES}}</b></li><li>Commits : <b>#{{COMMITS}}</b></li><li>Additions : <b>#{{ADDITIONS}}</b></li><li>Deletions : <b>#{{DELETIONS}}</b></li><li>PRs (categorized) : <b>#{{CATEGORIZED_COUNT}}</b></li><li>PRs (uncategorized) : <b>#{{UNCATEGORIZED_COUNT}}</b></li><li>PRs (open) : <b>#{{OPEN_COUNT}}</b></li>\n<br />\n</ul>\n\n<br>\n\n---\n\n<br>\n\n### Commits (#{{UNCATEGORIZED_COUNT}})\nThe following commits are uncategorized:\n#{{UNCATEGORIZED}}\n\n<br>\n\n---\n\n<br>\n\n### Pull Requests\nThis release is associated with the following pull requests:\n#{{CHANGELOG}}\n\n<br>\n\n"
+                      "template": "## Release Info \n| Item | Value |\n| --- | --- |\n|<sub>📄 ${{ env.FILE_ZIP }}</sub>|<sub>Compiled noxenv library</sub>|\n|<sub>📄 sha256sum.txt.asc</sub>|<sub>Signed SHA256 hash digest</sub>|\n|<sub>📄 sha1sum.txt.asc</sub>|<sub>Signed SHA1 hash digest</sub>|\n|<sub>🏷️ SHA256</sub>|<sub>`${{ env.SHA256SUM }}`</sub>|\n|<sub>🏷️ GUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.GUID }}`</sub>|\n|<sub>🏷️ UUID</sub>|<sub>`${{ steps.task_release_dotenv_get.outputs.UUID }}`</sub>|\n|<sub>🕟 Stamp</sub>|<sub>`#{{FROM_TAG}}-#{{FROM_TAG_DATE}} 🔺 #{{TO_TAG}}-#{{TO_TAG_DATE}}`</sub>|\n|<sub>📅 Last Release</sub>|<sub>`#{{DAYS_SINCE}} days ago`</sub>|\n\n<br>\n\n---\n\n<br>\n\n### What's New\nThis release contains the following changes:\n\n<br>\n\n---\n\n<br>\n\n### Statistics\nHow the files have changed:\n<ul><li><a href='#{{RELEASE_DIFF}}'>Changed files</a> : <b>#{{CHANGED_FILES}}</b></li><li>Changes : <b>#{{CHANGES}}</b></li><li>Commits : <b>#{{COMMITS}}</b></li><li>Additions : <b>#{{ADDITIONS}}</b></li><li>Deletions : <b>#{{DELETIONS}}</b></li><li>PRs (categorized) : <b>#{{CATEGORIZED_COUNT}}</b></li><li>PRs (uncategorized) : <b>#{{UNCATEGORIZED_COUNT}}</b></li><li>PRs (open) : <b>#{{OPEN_COUNT}}</b></li>\n<br />\n</ul>\n\n<br>\n\n---\n\n<br>\n\n### Commits (#{{UNCATEGORIZED_COUNT}})\nThe following commits are uncategorized:\n#{{UNCATEGORIZED}}\n\n<br>\n\n---\n\n<br>\n\n### Pull Requests\nThis release is associated with the following pull requests:\n#{{CHANGELOG}}\n\n<br>\n\n"
                     }
               env:
                   GITHUB_TOKEN: ${{ secrets.ADMINSERV_TOKEN }}
