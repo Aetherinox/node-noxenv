@@ -33,12 +33,12 @@
 #                       Add system env var with path to act.exe
 #                       Run the commands:
 #                           git pull https://github.com/username/repo
-#                           act -W .github/workflows/labels-create.yml -P ubuntu-latest=catthehacker/ubuntu:full-22.04
-#                           act -W .github/workflows/labels-create.yml -s TOKEN_CL=XXXXXXXXXX --pull=false
+#                           act -W .github/workflows/package-release.yml -P ubuntu-latest=catthehacker/ubuntu:full-22.04
+#                           act -W .github/workflows/package-release.yml -s TOKEN_CL=XXXXXXXXXX --pull=false
 # #
 
-name: '📦 Publish › Release Package'
-run-name: '📦 Publish › Release Package'
+name: '📦 Package › Release'
+run-name: '📦 Package › Release'
 
 on:
     workflow_dispatch:
