@@ -81,7 +81,7 @@ jobs:
 
             - name: '☑️ Checkout'
               id: task_tests_run_checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
 
             # #
             #   Job > Tests > Cancel existing runs
